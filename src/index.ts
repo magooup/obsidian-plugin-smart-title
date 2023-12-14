@@ -13,11 +13,11 @@ export default class SmartTitlePlugin extends Plugin {
         await this.loadSettings();
 
         // Watch the editor-change events then do the main logic work.
-        this.app.workspace.on("editor-change", (editor, info) => {
+        this.registerEvent(this.app.workspace.on("editor-change", (editor, info) => {
             if (info.file) {
                 this.smartTitle(info.file)
             }
-        });
+        }));
 
         // add settings tab.
         this.addSettingTab(new SmartTitleSettingsTab(this.app, this));
@@ -59,20 +59,18 @@ export default class SmartTitlePlugin extends Plugin {
     // add tags & alias
     private async addTagAndAlias(currentFile: TFile, tag: string, remaining: string, remainingAsAlias: boolean): Promise<void> {
         await this.app.fileManager.processFrontMatter(currentFile, (frontMatter: { aliases: string[] | string, tags: string[] | string }): void => {
-            const tags = parseFrontMatterTags(frontMatter) || [];
-            const aliases = parseFrontMatterAliases(frontMatter) || [];
+            const tags = [...frontMatter.tags];
+            const aliases = [...frontMatter.aliases]
             // add tags
-            const formattedTag = '#' + tag;
-            if (tag && tag.length > 0 && !tags.includes(formattedTag)) {
-                tags.push(formattedTag);
+            if (tag && tag.length > 0 && /[^0-9#\s]/g.test(tag) && !tags.includes(tag)) {
+                tags.push(tag);
+                frontMatter.tags = tags;
             }
             // add alias
             if (remainingAsAlias && remaining && remaining.length > 0 && !aliases.includes(remaining)) {
                 aliases.push(remaining);
+                frontMatter.aliases = aliases;
             }
-            // write back tags and aliases
-            frontMatter.aliases = aliases;
-            frontMatter.tags = tags;
         });
     }
 }

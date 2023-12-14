@@ -27,7 +27,7 @@ export class SmartTitleSettingsTab extends PluginSettingTab {
     display() {
         const { containerEl } = this;
         containerEl.empty();
-        containerEl.createEl('h2', { text: 'Smart Title' });
+        containerEl.createEl('h2', { text: 'Advanced Settings' });
 
         // settings.tagPatterns
         new Setting(containerEl)
