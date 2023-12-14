@@ -1,7 +1,7 @@
 {
 	"id": "smart-title",
 	"name": "Smart Title",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Automatically extract tag and alias from the title.",
 	"author": "magooup",
