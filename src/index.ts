@@ -59,8 +59,8 @@ export default class SmartTitlePlugin extends Plugin {
     // add tags & alias
     private async addTagAndAlias(currentFile: TFile, tag: string, remaining: string, remainingAsAlias: boolean): Promise<void> {
         await this.app.fileManager.processFrontMatter(currentFile, (frontMatter: { aliases: string[] | string, tags: string[] | string }): void => {
-            const tags = [...frontMatter.tags];
-            const aliases = [...frontMatter.aliases]
+            const tags = [...(frontMatter.tags || [])];
+            const aliases = [...(frontMatter.aliases || [])]
             // add tags
             if (tag && tag.length > 0 && /[^0-9#\s]/g.test(tag) && !tags.includes(tag)) {
                 tags.push(tag);
